@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Универсальный конструктор дипломов</title>
+  <!-- Favicon для браузеров -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- PWA иконки (проверьте наличие файлов с такими именами) -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512x512.png">
+
+  <!-- Manifest для PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Метатеги для отображения в мессенджерах (Open Graph) -->
+  <meta property="og:title" content="🎓 Конструктор дипломов">
+  <meta property="og:description" content="Создайте профессиональный диплом или сертификат за несколько минут онлайн.">
+  <meta property="og:image" content="https://github.com/OlgaZero/TestConstructDiplom/logo1200x630.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://github.com/OlgaZero/TestConstructDiplom/index.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:site_name" content="Конструктор дипломов">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🎓 Конструктор дипломов">
+  <meta name="twitter:description" content="Быстрое создание и скачивание дипломов и сертификатов.">
+  <meta name="twitter:image" content="https://github.com/OlgaZero/TestConstructDiplom/logo1200x630.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+    <section class="form-panel">
+      <h2>🎓 Заполните данные</h2>
+      <form id="certForm">
+
+        <!-- Данные Организации -->
+        <label>Название организации</label>
+        <input type="text" id="orgName" placeholder="МАОУ ДО «Технополис»" required>
+
+        <!-- Данные Документа -->
+        <label>Тип документа</label>
+        <select id="docType">
+          <option value="diploma">🏆 Диплом</option>
+          <option value="certificate">📜 Сертификат</option>
+        </select>
+
+        <label id="degreeLabel">Степень диплома</label>
+        <select id="degree">
+          <option value="I">I степень</option>
+          <option value="II" selected>II степень</option>
+          <option value="III">III степень</option>
+        </select>
+
+        <!-- Данные Участника -->
+        <label>ФИО участника</label>
+        <input type="text" id="fullName" placeholder="Иванов Иван Иванович" required>
+
+        <label>Наставник (ФИО)</label>
+        <input type="text" id="mentor" placeholder="Петров П.П.">
+
+        <label>Номинация (если есть)</label>
+        <input type="text" id="nomination" placeholder="«Веб-дизайн»">
+
+        <label>Название конкурса/программы</label>
+        <input type="text" id="contestName" placeholder="Открытый конкурс..." required>
+
+        <!-- Данные Подписанта (Новые поля) -->
+        <label>Должность руководителя</label>
+        <input type="text" id="jobTitle" placeholder="Директор" value="Директор">
+
+        <label>ФИО руководителя</label>
+        <input type="text" id="signatoryName" placeholder="Иванов И.И." required>
+
+        <label>Город</label>
+        <input type="text" id="city" value="Сургут">
+
+        <label>Год</label>
+        <input type="number" id="year" value="2026">
+
+        <!-- Необязательный QR -->
+        <label>Ссылка для QR-кода (необязательно)</label>
+        <input type="text" id="qrData" placeholder="Оставьте пустым, если не нужен">
+      </form>
+      <button id="downloadBtn">📥 Скачать (PDF)</button>
+    </section>
+
+    <!-- ОБЛАСТЬ ПРЕДПРОСМОТРА -->
+    <section class="preview-panel">
+      <h2>👁 Предпросмотр</h2>
+      <div class="preview-scaler">
+        <div class="diploma" id="diplomaTemplate">
+
+          <!-- ВЕРХНЯЯ ЧАСТЬ: Организация по центру -->
+          <div class="org-header">
+            <span class="org-name" id="outOrgName">АНО ДПО «ФОРСАЙТ»</span>
+          </div>
+
+          <!-- ЗАГОЛОВОК -->
+          <div class="main-content">
+            <div class="main-title">
+              <h1 id="outDocType">ДИПЛОМ</h1>
+              <h2 id="outDegree">II степени</h2>
+            </div>
+            <p class="award-text">награждается</p>
+            <p class="participant-name" id="outName">Иванов Иван Иванович</p>
+            <p class="mentor-text">(наставник – <span id="outMentor">Петров П.П.</span>)</p>
+
+            <div class="contest-info">
+              <p id="outNomination" style="display: none;">НОМИНАЦИЯ...</p>
+              <p id="outContest">ОТКРЫТОГО КОНКУРСА...</p>
+            </div>
+          </div>
+
+          <!-- НИЖНЯЯ ЧАСТЬ: Подпись в строку + QR -->
+          <div class="bottom-area">
+            <!-- Строка подписи -->
+            <div class="signature-row">
+              <span class="job-title" id="outJobTitle">Директор</span>
+              <span class="signature-line"></span> <!-- Место для росчерка -->
+              <span class="signatory-name" id="outSignatory">Иванов И.И.</span>
+            </div>
+
+            <!-- QR-код (справа) -->
+            <div class="qr-block" id="qrBlock" style="display: none;">
+              <div class="qr-code" id="qrCode"></div>
+            </div>
+          </div>
+
+          <!-- ГОРОД И ГОД -->
+          <div class="city-year">
+            <span id="outCity">Сургут</span>, <span id="outYear">2026</span>
+          </div>
+
+          <!-- ФОНОВАЯ ПОЛОСА -->
+          <div class="bottom-rect"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- БИБЛИОТЕКИ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
